@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import "./WheelPage.css"; // Import CSS for styling
+import "./WheelPage.css";
 
 const WheelPage = () => {
   const [items, setItems] = useState([]);
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState("");
+  const [spinImage, setSpinImage] = useState(null);
 
   useEffect(() => {
     const storedItems = JSON.parse(localStorage.getItem("wheelItems")) || [];
     setItems(storedItems);
+    const storedImage = localStorage.getItem("spinImage");
+    if (storedImage) {
+      setSpinImage(storedImage);
+    }
   }, []);
 
   const handleSpin = () => {
@@ -32,12 +37,10 @@ const WheelPage = () => {
       }
     });
 
-    // Simulate spinning animation
     const spinInterval = setInterval(() => {
       setResult(items[Math.floor(Math.random() * items.length)].name);
     }, 100);
 
-    // Stop spinning after some time (e.g., 3 seconds)
     setTimeout(() => {
       clearInterval(spinInterval);
       setResult(spinResult);
@@ -48,16 +51,23 @@ const WheelPage = () => {
   return (
     <div className="wheel-container">
       <div className="content">
-        <h1 className="title">Spin the Wheel</h1>
+        <h1 className="title">GACHAPON</h1>
+        {spinImage && (
+          <div className="uploaded-image-container">
+            <img src={spinImage} alt="Uploaded" className="uploaded-image" />
+          </div>
+        )}
         <div className="result-container">
-          {result && <p className="result">Result: {result}</p>}
+          <div className="result-box">
+            <p className="result">{result || "???"}</p>
+          </div>
         </div>
         <button
           className="spin-button"
           onClick={handleSpin}
           disabled={spinning}
         >
-          {spinning ? "Spinning..." : "Spin"}
+          {spinning ? "Gachaing..." : "Spin"}
         </button>
       </div>
     </div>
